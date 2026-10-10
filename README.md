@@ -29,7 +29,7 @@ terbium parses business documents (vendor catalogues first, plus invoices, recei
 
 <p align="center">
   <a href="https://go.nodemaven.com/terbiumreadmeoct" title="NodeMaven: best proxy for web scraping and automation">
-    <img src="https://raw.githubusercontent.com/anishfyi/terbium/main/assets/sponsors/nodemaven-banner.jpg" alt="NodeMaven: best proxy for web scraping and automation with the highest quality IP" width="720">
+    <img src="https://velofy.co/images/sponsors/nodemaven-banner.webp" alt="NodeMaven: best proxy for web scraping and automation with the highest quality IP" width="720">
   </a>
 </p>
 
