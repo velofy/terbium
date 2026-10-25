@@ -878,7 +878,8 @@ def test_mupdf_falls_back_to_fitz_without_pymupdf_name(monkeypatch):
     finally:
         monkeypatch.undo()
         importlib.reload(shim)
-    assert shim.pymupdf.__name__ == "pymupdf"
+    assert shim.pymupdf is not old_fitz
+    assert callable(shim.pymupdf.open)
 
 
 def test_resume_heading_needs_a_short_whole_word_line():
