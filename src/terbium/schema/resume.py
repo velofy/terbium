@@ -39,10 +39,11 @@ def _map_section(text: str) -> Optional[str]:
     """Return the section a heading line starts, or None for a content line.
 
     A heading is a line that is exactly a section word (``summary`` and
-    ``objective`` included), or a short line of at most four words that names a
-    section as a whole word or phrase, such as "Work Experience". Longer lines,
-    such as "Led a team with deep Python experience", and bulleted lines are
-    content of the current section.
+    ``objective`` included), or a short line of at most four words in which a
+    word starts with a section word or phrase, such as "Work Experience",
+    "Academics" or "Educational Background". Longer lines, such as "Led a team
+    with deep Python experience", and bulleted lines are content of the current
+    section.
     """
     t = text.strip().lower().rstrip(":").strip()
     if not t or t[0] in _BULLETS:
@@ -54,7 +55,9 @@ def _map_section(text: str) -> Optional[str]:
         return None
     for canon, subs in SECTION_SYNONYMS:
         for s in subs:
-            if re.search(r"\b" + re.escape(s) + r"\b", t):
+            # start of a word only, so "Educational" and "Academics" still name
+            # a section and "Inexperienced" does not
+            if re.search(r"\b" + re.escape(s), t):
                 return canon
     return None
 

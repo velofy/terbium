@@ -882,7 +882,7 @@ def test_mupdf_falls_back_to_fitz_without_pymupdf_name(monkeypatch):
     assert callable(shim.pymupdf.open)
 
 
-def test_resume_heading_needs_a_short_whole_word_line():
+def test_resume_heading_needs_a_short_line():
     from terbium.schema.resume import _map_section
 
     assert _map_section("EXPERIENCE") == "experience"
@@ -890,6 +890,11 @@ def test_resume_heading_needs_a_short_whole_word_line():
     assert _map_section("Technical Skills:") == "skills"
     assert _map_section("Licenses & Certifications") == "certifications"
     assert _map_section("Summary") == "summary"
+    # headings 0.10.0 recognised through a longer word stay headings
+    assert _map_section("Educational Background") == "education"
+    assert _map_section("Academics") == "education"
+    assert _map_section("Work Experiences") == "experience"
+    assert _map_section("Technical Skillset") == "skills"
     # a sentence that mentions a section word is content, not a heading
     assert _map_section("Led a team with deep Python experience") is None
     assert _map_section("• Python experience") is None

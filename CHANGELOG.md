@@ -9,7 +9,7 @@ The first PyPI release since 0.9.7. 0.10.0 was published on GitHub only, so `pip
 ### Fixed
 
 - No more `FutureWarning: The fitz API is deprecated` on every import and every command run with PyMuPDF 2.0. terbium imports PyMuPDF as `pymupdf`, and falls back to `fitz` only on PyMuPDF 1.24.0 to 1.24.2, which predate that name.
-- Resume lines that mention a section word are kept. A line such as "Led a team with deep Python experience" was read as a heading: it was dropped from the content and started a new section. A heading is now a line that is exactly a section word, or a line of at most four words that names a section as a whole word or phrase, such as "Work Experience". Bulleted lines are always content. The trade-off: a heading of five words or more, such as "Education, Training and Professional Development", is now a content line of the section before it.
+- Resume lines that mention a section word are kept. A line such as "Led a team with deep Python experience" was read as a heading: it was dropped from the content and started a new section. A heading is now a line that is exactly a section word, or a line of at most four words in which a word starts with a section word or phrase, such as "Work Experience", "Academics" or "Educational Background". A section word inside another word, as in "Inexperienced", no longer counts. Bulleted lines are always content. The trade-off: a heading of five words or more, such as "Education, Training and Professional Development", is now a content line of the section before it.
 - The image manifest's `dominant_color` no longer uses `Image.getdata`, which Pillow 13 deprecates and Pillow 14 removes. On Pillow 14 the colour would have come back empty with no error.
 
 ### Documentation
@@ -23,7 +23,7 @@ The first PyPI release since 0.9.7. 0.10.0 was published on GitHub only, so `pip
 - `build_catalog(..., ocr=True)` without Tesseract prints the advice for an OCR pass that already ran, so it points at the vision lane instead of telling you to install Tesseract. Leave `ocr="auto"`.
 - `build_catalog(..., ai=True)` skips the AI fill for photo rows; pass `terbium.AI()`.
 - A phone number written `(555) 123-4567` comes out as `555) 123-4567`.
-- A resume line of four words or fewer that names a section is still read as a heading, so `Skills: Python, SQL` starts the skills section and the text after the colon is dropped.
+- A resume line of four words or fewer that names a section is still read as a heading, so `Skills: Python, SQL` starts the skills section and the text after the colon is dropped, and a short line such as "Experienced Python developer" starts the experience section.
 
 ## 0.10.0 (2026-09-30)
 
