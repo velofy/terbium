@@ -14,7 +14,7 @@ The first PyPI release since 0.9.7. 0.10.0 was published on GitHub only, so `pip
 
 ### Documentation
 
-- The README leads with the terbium app tile, names NodeMaven as primary sponsor with the October tracking links, and no longer says that PyPI serves 0.9.7.
+- The README leads with the terbium app tile, names NodeMaven as primary sponsor with the October tracking links, and no longer says that PyPI serves 0.9.7. Its links to repository files are absolute, so they work on PyPI.
 - The `parse` and `build_catalog` docstrings and the developer notes in `docs/` (DESIGN, ROADMAP, TAXONOMY) now match the code.
 
 ### Known issues
