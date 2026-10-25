@@ -22,7 +22,7 @@ from .model.record import Record
 from .model.table import ExtractedTable
 from .render import records_to_csv, render_html, render_terminal_table
 
-__version__ = "0.10.0"
+__version__ = "0.10.1"
 
 __all__ = [
     "parse",
