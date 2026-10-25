@@ -23,6 +23,7 @@ The first PyPI release since 0.9.7. 0.10.0 was published on GitHub only, so `pip
 - `build_catalog(..., ocr=True)` without Tesseract prints the advice for an OCR pass that already ran, so it points at the vision lane instead of telling you to install Tesseract. Leave `ocr="auto"`.
 - `build_catalog(..., ai=True)` skips the AI fill for photo rows; pass `terbium.AI()`.
 - A phone number written `(555) 123-4567` comes out as `555) 123-4567`.
+- A resume line of four words or fewer that names a section is still read as a heading, so `Skills: Python, SQL` starts the skills section and the text after the colon is dropped.
 
 ## 0.10.0 (2026-09-30)
 
