@@ -73,11 +73,12 @@ def _dominant_color(data: bytes) -> Optional[str]:
         from PIL import Image
 
         with Image.open(io.BytesIO(data)) as im:
-            im = im.convert("RGB").resize((16, 16))
-            px = list(im.getdata())
-        r = sum(p[0] for p in px) // len(px)
-        g = sum(p[1] for p in px) // len(px)
-        b = sum(p[2] for p in px) // len(px)
+            # raw RGB bytes, not Image.getdata(), which Pillow 14 removes
+            raw = im.convert("RGB").resize((16, 16)).tobytes()
+        n = len(raw) // 3
+        r = sum(raw[0::3]) // n
+        g = sum(raw[1::3]) // n
+        b = sum(raw[2::3]) // n
         return f"#{r:02x}{g:02x}{b:02x}"
     except Exception:
         return None

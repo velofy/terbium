@@ -917,3 +917,20 @@ def test_resume_keeps_lines_that_mention_a_section_word(tmp_path):
     assert ("experience", "Led a team with deep Python experience") in content
     assert ("experience", "Senior Engineer at TechCo (2020-2024)") in content
     assert ("education", "B.S. Computer Science, State University") in content
+
+
+def test_dominant_color_without_deprecated_pillow_api():
+    # Image.getdata() warns on Pillow 13 and is removed in Pillow 14; the helper
+    # swallows errors, so a removed API would quietly return None.
+    import io
+    import warnings
+
+    from PIL import Image
+
+    from terbium.extract import _dominant_color
+
+    buf = io.BytesIO()
+    Image.new("RGB", (40, 30), (200, 100, 50)).save(buf, format="PNG")
+    with warnings.catch_warnings():
+        warnings.simplefilter("error", DeprecationWarning)
+        assert _dominant_color(buf.getvalue()) == "#c86432"
