@@ -9,7 +9,7 @@ The first PyPI release since 0.9.7. 0.10.0 was published on GitHub only, so `pip
 ### Fixed
 
 - No more `FutureWarning: The fitz API is deprecated` on every import and every command run with PyMuPDF 2.0. terbium imports PyMuPDF as `pymupdf`, and falls back to `fitz` only on PyMuPDF 1.24.0 to 1.24.2, which predate that name.
-- Resume lines that mention a section word are kept. A line such as "Led a team with deep Python experience" was read as a heading: it was dropped from the content and started a new section. A heading is now a line that is exactly a section word, or a line of at most four words that names a section as a whole word or phrase, such as "Work Experience". Bulleted lines are always content.
+- Resume lines that mention a section word are kept. A line such as "Led a team with deep Python experience" was read as a heading: it was dropped from the content and started a new section. A heading is now a line that is exactly a section word, or a line of at most four words that names a section as a whole word or phrase, such as "Work Experience". Bulleted lines are always content. The trade-off: a heading of five words or more, such as "Education, Training and Professional Development", is now a content line of the section before it.
 - The image manifest's `dominant_color` no longer uses `Image.getdata`, which Pillow 13 deprecates and Pillow 14 removes. On Pillow 14 the colour would have come back empty with no error.
 
 ### Documentation
