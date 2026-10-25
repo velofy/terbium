@@ -33,7 +33,7 @@ the words around it are the record.
 
 **Lane:** `build_catalog` + `layout/labels.py` + `extract.py`. Priority: this
 release hardens the picture-heavy end (dense grids, sparse-photo pages, mixed
-decks). See `docs/catalog.md`.
+decks). See [The catalog table](https://velofy.co/terbium/catalog/).
 
 ## Archetype B: forms and key-value documents (transaction lane)
 
@@ -87,8 +87,8 @@ is the anchor; the block under it is the record.
 | Proposal / SOW | parties, scope sections, pricing table | narrative + a pricing table |
 | Meeting minutes | date, attendees, agenda items, actions | bullet-heavy, names + action verbs |
 
-**Lane:** section detection from font size/weight + date-range and contact
-regexes + `schema/resume.py`. Priority: resumes/CVs this release (HR tech is a
+**Lane:** section headings matched by name (short lines naming a section) +
+contact regexes (email, phone, links) + `schema/resume.py`. Priority: resumes/CVs this release (HR tech is a
 target market); contracts and papers are prose, so the honest output is
 section records, not fake tabulation; later.
 
@@ -126,29 +126,36 @@ Priority: done; regressions guarded by tests.
 | Photo deck / portfolio | full-bleed images, captions | image-only slides |
 
 **Lane:** PPTX adapter native tables + picture extraction; product decks go
-through the catalog lane. Priority: product decks this release via the
-per-page label lane; the rest are honestly prose with occasional tables.
+through the catalog lane. Priority: product decks this release, one catalog
+row per slide picture; the rest are honestly prose with occasional tables.
 
 ## Archetype F: flowing prose (out of scope for rows)
 
 Books, novels, newsletters, essays, magazines, brochures of pure narrative.
-There is no record structure to reconstruct; terbium will classify these as
-`unknown` and say so rather than invent rows. If a future lane serves them, it
-is a chapters/sections outline, and it is not this release.
+There is no record structure to reconstruct. When nothing scores, terbium
+classifies them as `unknown`; prose that mentions keywords such as "experience"
+or "invoice" can still land in another type, so check `doc.doc_type` and pass
+`--type` when the guess is wrong. If a future lane serves them, it is a
+chapters/sections outline, and it is not this release.
 
 ## Classification signals summary
 
-Cheap signals computed per page, combined in `terbium.classify`:
+Cheap signals computed per page and summed across pages in `terbium.classify`:
 
-- **Photo density and count.** Many photos with short nearby text: archetype A.
-- **Keyword hits.** "invoice", "bill to", "amount due", "total", "resume",
-  "experience", "education", "abstract", "purchase order": archetypes B and C.
-- **Colon-terminated short lines.** Many of them: archetype B key-value.
-- **Currency/date density.** High near the right edge: archetype B totals;
-  date ranges at line starts: resume experience.
-- **Column regularity.** Repeating x-aligned multi-cell rows: archetype D.
-- **Section headers.** Bold/size outliers spaced down the page: archetype C.
-- **None of the above, mostly prose:** archetype F, reported honestly.
+- **Photo count and image density.** Several photos covering the page: archetype A.
+- **Keyword hits.** "invoice", "receipt", "bill to", "amount due", "subtotal",
+  "purchase order", "quote" for archetype B; "resume", "experience",
+  "education", "skills", "employment" for archetype C; "catalog", "sku",
+  "material" for archetype A.
+- **Colon-terminated `Label: value` lines, amounts, dates, invoice numbers:**
+  archetype B.
+- **Emails and phone numbers:** archetype C contact block.
+- **Section headers.** At least two bold or large lines plus a resume keyword:
+  archetype C.
+- **SKU-like tokens:** archetype A. **Native tables** (XLSX, CSV, PPTX), or
+  three or more amounts on a page with few photos: archetype D.
+- **PPTX file:** archetype E.
+- **No type scoring at least 0.5:** `unknown`, which covers archetype F.
 
 The classifier suggests; `--type` overrides. A wrong guess costs a re-run with
 a flag, never silent garbage.

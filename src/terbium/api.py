@@ -94,14 +94,18 @@ def parse(
 ) -> ParsedDocument:
     """Parse a PDF/PPTX/XLSX/CSV/image file into structured, confidence-scored records.
 
-    ``schema``: "generic" (default) or "furniture"/"product"/"transaction"/"resume",
-    or a Schema instance.
+    ``schema``: ``None`` (default) picks one from the document type (product for
+    catalog/lookbook/table, transaction, resume, generic for deck/unknown);
+    or "generic"/"product"/"furniture"/"transaction"/"resume", a registered
+    schema name, or a Schema instance.
     ``doc_type``: ``"auto"`` classifies after adapt, or override with
-    catalog/transaction/resume/table/deck/lookbook.
+    catalog/lookbook/transaction/resume/table/deck/unknown.
     ``ai``: a ``terbium.AI(...)``, ``True`` (use env keys), or ``None`` (off).
     ``threshold``: confidence below which a record is "ambiguous".
-    ``ocr``: ``"auto"`` reads image-only pages with a local Tesseract pass (no
-    API key; no-op when Tesseract is absent). ``True``/``False`` forces it.
+    ``ocr``: ``"auto"`` reads image-only PDF pages with a local Tesseract pass (no
+    API key; no-op when Tesseract is absent). ``False`` turns it off for PDF
+    pages; ``True`` behaves like ``"auto"``. Image files are always read with
+    Tesseract when it is installed.
     ``announce``: print the escalation message to stderr when AI could help but
     no key is set. This is terbium telling you it is stuck.
     """

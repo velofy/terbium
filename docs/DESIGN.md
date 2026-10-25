@@ -1,6 +1,8 @@
 # terbium: a god-level algorithmic multi-file parser that knows when to call AI
 
-**Status:** DRAFT design for approval (2026-07-03).
+**Status:** DRAFT design for approval (2026-07-03), kept as a historical note. The
+repository now lives at github.com/velofy/terbium, the user documentation at
+https://velofy.co/terbium/, and the code layout has moved on from the one below.
 Repo target: github.com/anishfyi/terbium (public, MIT). Nothing created yet.
 Landing: anishfyi.github.io/terbium. Trove-linked.
 

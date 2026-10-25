@@ -354,7 +354,8 @@ def build_catalog(path: str, images_dir: Optional[str] = None, ai=None,
 
     ``ocr``: ``"auto"`` (default) runs a local Tesseract pass on image-only pages
     to read a code/name/dimensions the file baked into its pixels - no API key,
-    no-op when Tesseract is absent. Pass ``True``/``False`` to force it.
+    no-op when Tesseract is absent. ``False`` turns it off. ``True`` cannot make
+    Tesseract available: without it nothing is read.
     ``ai``: fills what even OCR cannot (materials hidden in prose, image-only
     reasoning). ``announce``: print the escalation message to stderr when the
     table is genuinely missing readable data.
