@@ -17,8 +17,7 @@ import re
 from collections import defaultdict
 from typing import List, Optional
 
-import fitz
-
+from ._mupdf import pymupdf
 from .documents.pdf import PdfAdapter
 from .layout import labels as _labels
 from .layout.images import classify
@@ -146,7 +145,7 @@ def _export_pass(
 ) -> List[dict]:
     manifest: List[dict] = []
     used_names: dict = {}
-    doc = fitz.open(path)
+    doc = pymupdf.open(path)
     try:
         for p in pages:
             items = _label_positions(p) if associate else []

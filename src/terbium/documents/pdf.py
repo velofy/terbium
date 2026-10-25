@@ -9,8 +9,7 @@ from __future__ import annotations
 
 from typing import List
 
-import fitz  # PyMuPDF
-
+from .._mupdf import pymupdf
 from ..layout.images import classify
 from ..model.elements import ImageRef, Page, Word
 from .base import DocumentAdapter, register
@@ -62,7 +61,7 @@ class PdfAdapter(DocumentAdapter):
 
     def parse(self, path: str) -> List[Page]:
         pages: List[Page] = []
-        with fitz.open(path) as doc:
+        with pymupdf.open(path) as doc:
             for i, page in enumerate(doc):
                 rect = page.rect
                 words: List[Word] = []
@@ -104,7 +103,7 @@ class PdfAdapter(DocumentAdapter):
 
 def render_page_png(path: str, index: int, dpi: int = 120) -> bytes:
     """Render one page to PNG bytes (used by the vision lane)."""
-    with fitz.open(path) as doc:
+    with pymupdf.open(path) as doc:
         page = doc[index]
         pix = page.get_pixmap(dpi=dpi)
         return pix.tobytes("png")

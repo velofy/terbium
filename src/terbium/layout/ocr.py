@@ -16,8 +16,7 @@ import os
 import shutil
 from typing import List, Optional
 
-import fitz
-
+from .._mupdf import pymupdf
 from ..model.elements import Word
 from ..documents.pdf import _span_words
 
@@ -27,7 +26,7 @@ def _quiet():
     """Silence Tesseract/MuPDF C-level chatter ('Image too small to scale',
     'Line cannot be recognized') that would otherwise spam stderr per page."""
     try:
-        fitz.TOOLS.mupdf_display_errors(False)
+        pymupdf.TOOLS.mupdf_display_errors(False)
     except Exception:
         pass
     try:
@@ -86,7 +85,7 @@ def available() -> bool:
     _ensure_tessdata()
     try:
         with _quiet():
-            doc = fitz.open()
+            doc = pymupdf.open()
             page = doc.new_page(width=120, height=60)
             page.insert_text((10, 30), "ocr")
             tp = page.get_textpage_ocr(dpi=72, full=True)
@@ -109,7 +108,7 @@ def _words_from_textpage(page, textpage) -> List[Word]:
 
 
 def ocr_page_words(page, dpi: int = 300) -> List[Word]:
-    """OCR a fitz page and return positioned words in page-point coordinates."""
+    """OCR a PyMuPDF page and return positioned words in page-point coordinates."""
     try:
         with _quiet():
             tp = page.get_textpage_ocr(dpi=dpi, full=True)
@@ -121,7 +120,7 @@ def ocr_page_words(page, dpi: int = 300) -> List[Word]:
 def ocr_image_words(blob: bytes, dpi: int = 300) -> List[Word]:
     """OCR raw image bytes (a PPTX picture), returning positioned words."""
     try:
-        doc = fitz.open(stream=blob, filetype=_sniff(blob))
+        doc = pymupdf.open(stream=blob, filetype=_sniff(blob))
     except Exception:
         return []
     try:
@@ -151,7 +150,7 @@ def enrich_pdf_pages(pages, path: str, min_words: int = 3, dpi: int = 300) -> in
     if not targets:
         return 0
     enriched = 0
-    with fitz.open(path) as doc:
+    with pymupdf.open(path) as doc:
         for p in targets:
             if p.index >= doc.page_count:
                 continue
