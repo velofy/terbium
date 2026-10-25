@@ -13,8 +13,8 @@
 
 terbium parses business documents (vendor catalogues first, plus invoices, receipts, resumes, price lists and decks) into clean rows. It rebuilds structure from the position of every word, scores its own confidence, and only calls an AI model when the algorithm cannot be sure.
 
-[![License: MIT](https://img.shields.io/badge/license-MIT-000000.svg)](LICENSE)
-[![Python 3.9+](https://img.shields.io/badge/python-3.9+-000000.svg)](pyproject.toml)
+[![License: MIT](https://img.shields.io/badge/license-MIT-000000.svg)](https://github.com/velofy/terbium/blob/main/LICENSE)
+[![Python 3.9+](https://img.shields.io/badge/python-3.9+-000000.svg)](https://github.com/velofy/terbium/blob/main/pyproject.toml)
 [![PyPI](https://img.shields.io/pypi/v/terbium-parse?color=000000&label=pypi)](https://pypi.org/project/terbium-parse/)
 
 **Documentation: https://velofy.co/terbium/**
@@ -107,7 +107,7 @@ terbium invoice.pdf --csv rows.csv --html report.html  # CSV + self-contained re
 - [Document taxonomy](https://velofy.co/terbium/taxonomy/)
 - [Evaluation](https://velofy.co/terbium/evaluation/) and [Changelog and status](https://velofy.co/terbium/changelog/)
 
-Developer notes stay in this repository: [docs/DESIGN.md](docs/DESIGN.md), [docs/ROADMAP.md](docs/ROADMAP.md) and [docs/TAXONOMY.md](docs/TAXONOMY.md).
+Developer notes stay in this repository: [docs/DESIGN.md](https://github.com/velofy/terbium/blob/main/docs/DESIGN.md), [docs/ROADMAP.md](https://github.com/velofy/terbium/blob/main/docs/ROADMAP.md) and [docs/TAXONOMY.md](https://github.com/velofy/terbium/blob/main/docs/TAXONOMY.md).
 
 ## Contributing
 
@@ -123,6 +123,6 @@ python eval/category_bench.py
 
 ## License
 
-MIT. Built by [anishfyi](https://github.com/anishfyi). See [LICENSE](LICENSE).
+MIT. Built by [anishfyi](https://github.com/anishfyi). See [LICENSE](https://github.com/velofy/terbium/blob/main/LICENSE).
 
 <div align="center"><sub>terbium · Tb · 65</sub></div>
