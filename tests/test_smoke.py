@@ -879,3 +879,41 @@ def test_mupdf_falls_back_to_fitz_without_pymupdf_name(monkeypatch):
         monkeypatch.undo()
         importlib.reload(shim)
     assert shim.pymupdf.__name__ == "pymupdf"
+
+
+def test_resume_heading_needs_a_short_whole_word_line():
+    from terbium.schema.resume import _map_section
+
+    assert _map_section("EXPERIENCE") == "experience"
+    assert _map_section("Work Experience") == "experience"
+    assert _map_section("Technical Skills:") == "skills"
+    assert _map_section("Licenses & Certifications") == "certifications"
+    assert _map_section("Summary") == "summary"
+    # a sentence that mentions a section word is content, not a heading
+    assert _map_section("Led a team with deep Python experience") is None
+    assert _map_section("• Python experience") is None
+    assert _map_section("Inexperienced hires mentored") is None
+
+
+def test_resume_keeps_lines_that_mention_a_section_word(tmp_path):
+    import terbium
+    from terbium._mupdf import pymupdf
+
+    doc = pymupdf.open()
+    pg = doc.new_page(width=612, height=792)
+    pg.insert_text((50, 50), "Jane Developer", fontsize=16)
+    pg.insert_text((50, 75), "jane@example.com", fontsize=10)
+    pg.insert_text((50, 120), "Work Experience", fontsize=12)
+    pg.insert_text((50, 145), "Senior Engineer at TechCo (2020-2024)", fontsize=10)
+    pg.insert_text((50, 165), "Led a team with deep Python experience", fontsize=10)
+    pg.insert_text((50, 200), "EDUCATION", fontsize=12)
+    pg.insert_text((50, 225), "B.S. Computer Science, State University", fontsize=10)
+    path = str(tmp_path / "resume.pdf")
+    doc.save(path)
+    doc.close()
+
+    parsed = terbium.parse(path, doc_type="resume", announce=False)
+    content = {(r.fields.get("section"), r.fields.get("content")) for r in parsed.records}
+    assert ("experience", "Led a team with deep Python experience") in content
+    assert ("experience", "Senior Engineer at TechCo (2020-2024)") in content
+    assert ("education", "B.S. Computer Science, State University") in content

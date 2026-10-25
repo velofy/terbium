@@ -1,6 +1,6 @@
 """Resume schema: candidate header + sectioned records.
 
-Header (name, email, phone, location, links) plus flat CSV rows for experience,
+Header (name, email, phone, links) plus flat CSV rows for experience,
 education, skills, projects, certifications with a section field.
 """
 from __future__ import annotations
@@ -29,15 +29,33 @@ _SECTION_RE = re.compile(
 )
 
 
+# A heading names its section in a few words ("Work Experience", "Licenses &
+# Certifications"); a longer line that mentions a section word is content.
+_MAX_HEADING_WORDS = 4
+_BULLETS = "\u2022\u2023\u25aa\u25cf\u25e6\u00b7*-\u2013\u2014"
+
+
 def _map_section(text: str) -> Optional[str]:
-    t = text.strip().lower().rstrip(":")
-    for canon, subs in SECTION_SYNONYMS:
-        for s in subs:
-            if s in t or t == s:
-                return canon
+    """Return the section a heading line starts, or None for a content line.
+
+    A heading is a line that is exactly a section word (``summary`` and
+    ``objective`` included), or a short line of at most four words that names a
+    section as a whole word or phrase, such as "Work Experience". Longer lines,
+    such as "Led a team with deep Python experience", and bulleted lines are
+    content of the current section.
+    """
+    t = text.strip().lower().rstrip(":").strip()
+    if not t or t[0] in _BULLETS:
+        return None
     m = _SECTION_RE.match(text.strip())
     if m:
         return m.group(1).lower()
+    if len(t.split()) > _MAX_HEADING_WORDS:
+        return None
+    for canon, subs in SECTION_SYNONYMS:
+        for s in subs:
+            if re.search(r"\b" + re.escape(s) + r"\b", t):
+                return canon
     return None
 
 
