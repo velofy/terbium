@@ -926,7 +926,7 @@ def test_resume_keeps_lines_that_mention_a_section_word(tmp_path):
 
 
 def test_dominant_color_without_deprecated_pillow_api():
-    # Image.getdata() warns on Pillow 13 and is removed in Pillow 14; the helper
+    # Image.getdata() warns from Pillow 12.1 and is removed in Pillow 14; the helper
     # swallows errors, so a removed API would quietly return None.
     import io
     import warnings
