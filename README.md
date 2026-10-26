@@ -1,25 +1,27 @@
-<div align="center">
-
-<a href="https://velofy.co/terbium/"><picture>
+<p align="center">
+  <a href="https://velofy.co/terbium/"><picture>
     <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/velofy/terbium/main/assets/tile-dark.svg">
     <img alt="terbium" src="https://raw.githubusercontent.com/velofy/terbium/main/assets/tile-light.svg" width="360">
   </picture></a>
+</p>
 
-# terbium
+<p align="center"><strong>Business documents in. Clean rows out.</strong></p>
 
-**Business documents in. Clean rows out.**
+<p align="center">
+  <a href="https://pypi.org/project/terbium-parse/"><img alt="PyPI" src="https://img.shields.io/pypi/v/terbium-parse?label=pypi&color=12130f"></a>
+  <a href="https://github.com/velofy/terbium/blob/main/pyproject.toml"><img alt="Python 3.9+" src="https://img.shields.io/badge/python-3.9+-12130f"></a>
+  <a href="https://github.com/velofy/terbium/blob/main/LICENSE"><img alt="License: MIT" src="https://img.shields.io/badge/license-MIT-12130f"></a>
+</p>
 
-</div>
+<p align="center">
+  <a href="https://velofy.co/terbium/">Documentation</a> ·
+  <a href="https://velofy.co/terbium/quickstart/">Quickstart</a> ·
+  <a href="https://github.com/velofy/terbium/blob/main/CHANGELOG.md">Changelog</a> ·
+  <a href="https://github.com/velofy/terbium/releases">Releases</a> ·
+  <a href="https://github.com/anishfyi/trove">Trove</a>
+</p>
 
 terbium parses business documents (vendor catalogues first, plus invoices, receipts, resumes, price lists and decks) into clean rows. It rebuilds structure from the position of every word, scores its own confidence, and only calls an AI model when the algorithm cannot be sure.
-
-[![License: MIT](https://img.shields.io/badge/license-MIT-000000.svg)](https://github.com/velofy/terbium/blob/main/LICENSE)
-[![Python 3.9+](https://img.shields.io/badge/python-3.9+-000000.svg)](https://github.com/velofy/terbium/blob/main/pyproject.toml)
-[![PyPI](https://img.shields.io/pypi/v/terbium-parse?color=000000&label=pypi)](https://pypi.org/project/terbium-parse/)
-
-**Documentation: https://velofy.co/terbium/**
-
-[Docs](https://velofy.co/terbium/) · [Quickstart](https://velofy.co/terbium/quickstart/) · [Trove](https://github.com/anishfyi/trove)
 
 ---
 
