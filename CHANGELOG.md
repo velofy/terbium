@@ -2,9 +2,35 @@
 
 Full history, including releases before this file existed: https://velofy.co/terbium/changelog/
 
+## 2.0.0 (2026-10-26)
+
+The first PyPI release since 0.9.7. 0.10.0 was published on GitHub only, so `pip install terbium-parse` now brings everything listed under 0.10.0 as well as the fixes below.
+
+2.0.0 follows 0.10.0 directly. The jump in the version number is not an API break: code written for 0.10.0 runs unchanged.
+
+### Fixed
+
+- No more `FutureWarning: The fitz API is deprecated` on every import and every command run with PyMuPDF 2.0. terbium imports PyMuPDF as `pymupdf`, and falls back to `fitz` only on PyMuPDF 1.24.0 to 1.24.2, which predate that name.
+- Resume lines that mention a section word are kept. A line such as "Led a team with deep Python experience" was read as a heading: it was dropped from the content and started a new section. A heading is now a line that is exactly a section word, or a line of at most four words in which a word starts with a section word or phrase, such as "Work Experience", "Academics" or "Educational Background". A section word inside another word, as in "Inexperienced", no longer counts. Bulleted lines are always content. The trade-off: a heading of five words or more, such as "Education, Training and Professional Development", is now a content line of the section before it.
+- The image manifest's `dominant_color` no longer uses `Image.getdata`, which Pillow 12.1 deprecates and Pillow 14 removes. On Pillow 14 the colour would have come back empty with no error.
+
+### Documentation
+
+- The README leads with the terbium app tile, names NodeMaven as primary sponsor with the October tracking links, and no longer says that PyPI serves 0.9.7. Its links to repository files are absolute, so they work on PyPI.
+- The `parse` and `build_catalog` docstrings and the developer notes in `docs/` (DESIGN, ROADMAP, TAXONOMY) now match the code.
+
+### Known issues
+
+- The 0.10.0 known issues below still apply.
+- `build_catalog(..., ocr=True)` without Tesseract prints the advice for an OCR pass that already ran, so it points at the vision lane instead of telling you to install Tesseract. Leave `ocr="auto"`.
+- `build_catalog(..., ai=True)` skips the AI fill for photo rows; pass `terbium.AI()`.
+- A phone number written `(555) 123-4567` comes out as `555) 123-4567`.
+- When an invoice or receipt is read from its page layout rather than a table, a label line that ends in digits, such as `Receipt No: R-8891` or `Date: 03/22/2024`, also becomes a line item, and the total can appear as two `total` records.
+- A resume line of four words or fewer that names a section is still read as a heading, so `Skills: Python, SQL` starts the skills section and the text after the colon is dropped, and a short line such as "Experienced Python developer" starts the experience section.
+
 ## 0.10.0 (2026-09-30)
 
-First tagged GitHub release. PyPI serves 0.9.7 until the 0.10.0 upload is made; until then install from the wheel attached to the GitHub release or from the `v0.10.0` tag.
+First tagged GitHub release, published on GitHub only; PyPI went from 0.9.7 to 2.0.0.
 
 ### Added
 
@@ -22,7 +48,7 @@ First tagged GitHub release. PyPI serves 0.9.7 until the 0.10.0 upload is made; 
 - The invoice and receipt AI step now runs. It looked for `header` records while the parser emits `summary` records, so it never filled anything. It now fills missing summary fields, adds a summary when there is none, and adds AI line items only when the parser found none.
 - `ParsedDocument.used_ai` is True only when a model call returned a response. Before, any transaction parse with a key set reported AI use.
 - Terminal tables truncate header cells to the column width, truncated cells no longer run two characters past their column, and column widths are budgeted for the box borders, so columns line up.
-- The catalog message no longer suggests `ocr=True` when Tesseract is not installed; it says to install Tesseract or use the AI vision lane.
+- The catalog message no longer tells you to run with `ocr=True` when Tesseract is not installed; it says to install Tesseract or use the AI vision lane.
 - OpenAI o-series models (the `opus` tier maps to `o3-mini`) are called with `max_completion_tokens` instead of `max_tokens`, which the openai SDK documents as incompatible with o-series models. The `openai`, `kimi`, `grok` and `ai` extras now require `openai>=1.45`, the first SDK version with that parameter.
 
 ### Known issues

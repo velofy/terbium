@@ -28,8 +28,8 @@ cross-tab PDFs we already handle) actually live.
 | 1 | Universal `product` schema (category-agnostic column mapping) | done (0.5.0) |
 | 2 | AI enrich layer: implicit attributes + vision reads | done (0.6.0) |
 | 3 | Normalization: units, currency, color/material taxonomies | done (0.7.0) |
-| 4 | Evaluation harness + public benchmark vs the field | done (0.8.0) |
-| 5 | Feed exporters (Shopify CSV, Google Merchant, generic PIM JSON) | done (0.9.0) |
+| 4 | Evaluation harness (`eval/category_bench.py`, six categories) | done (0.9.1) |
+| 5 | Feed exporters (Shopify CSV, generic PIM JSON) | done (0.8.0) |
 | 6 | Multi-document expansion: classify, transactions, resumes, universal output | done (0.10.0) |
 | 7 | Dense/sparse catalog improvements + image adapter | done (0.10.0) |
 | 8 | Public benchmark publication + category golden sets | next |
@@ -45,7 +45,7 @@ cross-tab PDFs we already handle) actually live.
   dense grid (12/page) and sparse (1/page) support, swatch retry in main pass.
 - **Transaction AI lane**: Anthropic-first fill modeled on `catalog_ai`.
 
-See [documents.md](documents.md) for CLI and API details.
+See [Invoices, receipts and resumes](https://velofy.co/terbium/documents/) for CLI and API details.
 
 ## Risks and honest limits
 

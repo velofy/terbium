@@ -14,10 +14,10 @@ import io
 import os
 import tempfile
 
-import fitz
 from PIL import Image, ImageDraw
 
 import terbium
+from terbium._mupdf import pymupdf
 
 # category -> list of (name, sku, materials/ingredients line)
 CATEGORIES = {
@@ -75,13 +75,13 @@ def _photo(seed: int) -> bytes:
 
 
 def make_pdf(products, path):
-    doc = fitz.open()
+    doc = pymupdf.open()
     page = doc.new_page(width=820, height=1040)
     for i, (name, sku, material) in enumerate(products):
         col, row = i % 2, i // 2
         x0 = 40 + col * 400
         y0 = 40 + row * 480
-        page.insert_image(fitz.Rect(x0, y0, x0 + 300, y0 + 220), stream=_photo(i))
+        page.insert_image(pymupdf.Rect(x0, y0, x0 + 300, y0 + 220), stream=_photo(i))
         page.insert_text((x0, y0 + 244), name, fontsize=15)          # name under photo
         page.insert_text((x0, y0 + 312), f"SKU: {sku}", fontsize=10)  # spaced below
         page.insert_text((x0, y0 + 330), material, fontsize=10)
@@ -113,14 +113,14 @@ def score(products, rows):
 
 def make_dense_pdf(path, n=12):
     """Dense grid: 12 products on one page (4x3)."""
-    doc = fitz.open()
+    doc = pymupdf.open()
     page = doc.new_page(width=820, height=1040)
     cols, rows = 4, 3
     for i in range(n):
         col, row = i % cols, i // cols
         x0 = 30 + col * 195
         y0 = 40 + row * 320
-        page.insert_image(fitz.Rect(x0, y0, x0 + 160, y0 + 120), stream=_photo(i))
+        page.insert_image(pymupdf.Rect(x0, y0, x0 + 160, y0 + 120), stream=_photo(i))
         page.insert_text((x0, y0 + 130), f"Dense Item {i + 1}", fontsize=9)
         page.insert_text((x0, y0 + 148), f"SKU: D-{100 + i}", fontsize=8)
         page.insert_text((x0, y0 + 162), "Material: Cotton", fontsize=8)
@@ -130,9 +130,9 @@ def make_dense_pdf(path, n=12):
 
 def make_sparse_pdf(path):
     """Sparse photo: 1 product image per page."""
-    doc = fitz.open()
+    doc = pymupdf.open()
     page = doc.new_page(width=600, height=800)
-    page.insert_image(fitz.Rect(50, 50, 350, 300), stream=_photo(0))
+    page.insert_image(pymupdf.Rect(50, 50, 350, 300), stream=_photo(0))
     page.insert_text((50, 320), "Solo Rug", fontsize=14)
     page.insert_text((50, 350), "SKU: SP-001", fontsize=10)
     page.insert_text((50, 370), "Material: Wool", fontsize=10)
@@ -142,17 +142,17 @@ def make_sparse_pdf(path):
 
 def make_mixed_pdf(path):
     """Mixed layout: dense grid on page 1, sparse on page 2."""
-    doc = fitz.open()
+    doc = pymupdf.open()
     page = doc.new_page(width=820, height=1040)
     for i in range(6):
         col, row = i % 3, i // 3
         x0 = 40 + col * 250
         y0 = 40 + row * 400
-        page.insert_image(fitz.Rect(x0, y0, x0 + 200, y0 + 150), stream=_photo(i))
+        page.insert_image(pymupdf.Rect(x0, y0, x0 + 200, y0 + 150), stream=_photo(i))
         page.insert_text((x0, y0 + 165), f"Mixed {i + 1}", fontsize=10)
         page.insert_text((x0, y0 + 185), f"SKU: MX-{i + 1}", fontsize=9)
     page2 = doc.new_page(width=600, height=800)
-    page2.insert_image(fitz.Rect(50, 50, 350, 300), stream=_photo(3))
+    page2.insert_image(pymupdf.Rect(50, 50, 350, 300), stream=_photo(3))
     page2.insert_text((50, 320), "Page Two Solo", fontsize=14)
     page2.insert_text((50, 350), "SKU: MX-SOLO", fontsize=10)
     doc.save(path)

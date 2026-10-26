@@ -1,25 +1,27 @@
-<div align="center">
-
-<a href="https://velofy.co/terbium/"><picture>
+<p align="center">
+  <a href="https://velofy.co/terbium/"><picture>
     <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/velofy/terbium/main/assets/tile-dark.svg">
     <img alt="terbium" src="https://raw.githubusercontent.com/velofy/terbium/main/assets/tile-light.svg" width="360">
   </picture></a>
+</p>
 
-# terbium
+<p align="center"><strong>Business documents in. Clean rows out.</strong></p>
 
-**Business documents in. Clean rows out.**
+<p align="center">
+  <a href="https://pypi.org/project/terbium-parse/"><img alt="PyPI" src="https://img.shields.io/pypi/v/terbium-parse?label=pypi&color=12130f"></a>
+  <a href="https://github.com/velofy/terbium/blob/main/pyproject.toml"><img alt="Python 3.9+" src="https://img.shields.io/badge/python-3.9+-12130f"></a>
+  <a href="https://github.com/velofy/terbium/blob/main/LICENSE"><img alt="License: MIT" src="https://img.shields.io/badge/license-MIT-12130f"></a>
+</p>
 
-</div>
+<p align="center">
+  <a href="https://velofy.co/terbium/">Documentation</a> ·
+  <a href="https://velofy.co/terbium/quickstart/">Quickstart</a> ·
+  <a href="https://github.com/velofy/terbium/blob/main/CHANGELOG.md">Changelog</a> ·
+  <a href="https://github.com/velofy/terbium/releases">Releases</a> ·
+  <a href="https://github.com/anishfyi/trove">Trove</a>
+</p>
 
 terbium parses business documents (vendor catalogues first, plus invoices, receipts, resumes, price lists and decks) into clean rows. It rebuilds structure from the position of every word, scores its own confidence, and only calls an AI model when the algorithm cannot be sure.
-
-[![License: MIT](https://img.shields.io/badge/license-MIT-000000.svg)](LICENSE)
-[![Python 3.9+](https://img.shields.io/badge/python-3.9+-000000.svg)](pyproject.toml)
-[![PyPI](https://img.shields.io/pypi/v/terbium-parse?color=000000&label=pypi)](https://pypi.org/project/terbium-parse/)
-
-**Documentation: https://velofy.co/terbium/**
-
-[Docs](https://velofy.co/terbium/) · [Quickstart](https://velofy.co/terbium/quickstart/) · [Trove](https://github.com/anishfyi/trove)
 
 ---
 
@@ -53,15 +55,7 @@ Codes for terbium users: `TERBIUM35` for 35% off mobile and residential proxies,
 pip install terbium-parse
 ```
 
-The PyPI name is `terbium-parse`; you `import terbium`, and the command is `terbium`. (The PyPI project named `terbium` is unrelated.)
-
-terbium 0.10.0 is released on GitHub, but PyPI still serves 0.9.7 until the 0.10.0 upload is made, so `pip install terbium-parse` gives you 0.9.7 today. This README describes 0.10.0, which adds invoices, receipts, resumes, image files, HTML output and more AI providers. To get 0.10.0 now, install the wheel attached to the GitHub release, or the tag:
-
-```bash
-pip install "https://github.com/velofy/terbium/releases/download/v0.10.0/terbium_parse-0.10.0-py3-none-any.whl"
-# or
-pip install "git+https://github.com/velofy/terbium.git@v0.10.0"
-```
+The PyPI name is `terbium-parse`; you `import terbium`, and the command is `terbium`. (The PyPI project named `terbium` is unrelated.) `terbium --version` prints the installed version.
 
 Optional AI lanes: `pip install "terbium-parse[anthropic]"` (or `openai`, `kimi`, `grok`, `gemini`, or `ai` for all). OCR of images and image-only pages needs a local `tesseract` binary. Details: [Installation](https://velofy.co/terbium/installation/).
 
@@ -115,7 +109,7 @@ terbium invoice.pdf --csv rows.csv --html report.html  # CSV + self-contained re
 - [Document taxonomy](https://velofy.co/terbium/taxonomy/)
 - [Evaluation](https://velofy.co/terbium/evaluation/) and [Changelog and status](https://velofy.co/terbium/changelog/)
 
-Developer notes stay in this repository: [docs/DESIGN.md](docs/DESIGN.md), [docs/ROADMAP.md](docs/ROADMAP.md) and [docs/TAXONOMY.md](docs/TAXONOMY.md).
+Developer notes stay in this repository: [docs/DESIGN.md](https://github.com/velofy/terbium/blob/main/docs/DESIGN.md), [docs/ROADMAP.md](https://github.com/velofy/terbium/blob/main/docs/ROADMAP.md) and [docs/TAXONOMY.md](https://github.com/velofy/terbium/blob/main/docs/TAXONOMY.md).
 
 ## Contributing
 
@@ -131,6 +125,6 @@ python eval/category_bench.py
 
 ## License
 
-MIT. Built by [anishfyi](https://github.com/anishfyi). See [LICENSE](LICENSE).
+MIT. Built by [anishfyi](https://github.com/anishfyi). See [LICENSE](https://github.com/velofy/terbium/blob/main/LICENSE).
 
 <div align="center"><sub>terbium · Tb · 65</sub></div>

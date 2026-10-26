@@ -216,7 +216,7 @@ def test_catalog_end_to_end_all_four_fields(tmp_path):
     # build_catalog recovers name, SKU, materials, and the image file for a product
     import io
 
-    import fitz
+    from terbium._mupdf import pymupdf
     from PIL import Image
 
     import terbium
@@ -226,13 +226,13 @@ def test_catalog_end_to_end_all_four_fields(tmp_path):
         Image.new("RGB", (400, 300), c).save(buf, format="PNG")
         return buf.getvalue()
 
-    doc = fitz.open()
+    doc = pymupdf.open()
     pg = doc.new_page(width=820, height=1040)
     products = [("Anatolia Kilim", "RUG-101", "Material: Wool", (170, 90, 70)),
                 ("Citrus Hand Wash", "HW-602", "Ingredients: Aqua, Grapefruit", (90, 130, 110))]
     for i, (name, sku, mat, col) in enumerate(products):
         y0 = 40 + i * 480
-        pg.insert_image(fitz.Rect(40, y0, 340, y0 + 220), stream=photo(col))
+        pg.insert_image(pymupdf.Rect(40, y0, 340, y0 + 220), stream=photo(col))
         pg.insert_text((40, y0 + 244), name, fontsize=15)
         pg.insert_text((40, y0 + 312), f"SKU: {sku}", fontsize=10)
         pg.insert_text((40, y0 + 330), mat, fontsize=10)
@@ -390,8 +390,8 @@ def _photo_bytes(color):
 
 
 def _make_invoice_pdf(path):
-    import fitz
-    doc = fitz.open()
+    from terbium._mupdf import pymupdf
+    doc = pymupdf.open()
     pg = doc.new_page(width=612, height=792)
     pg.insert_text((50, 50), "INVOICE", fontsize=18)
     pg.insert_text((50, 90), "Invoice Number: INV-2024-001", fontsize=11)
@@ -408,8 +408,8 @@ def _make_invoice_pdf(path):
 
 
 def _make_receipt_pdf(path):
-    import fitz
-    doc = fitz.open()
+    from terbium._mupdf import pymupdf
+    doc = pymupdf.open()
     pg = doc.new_page(width=400, height=600)
     pg.insert_text((30, 40), "RECEIPT", fontsize=14)
     pg.insert_text((30, 70), "Receipt No: R-8891", fontsize=10)
@@ -422,8 +422,8 @@ def _make_receipt_pdf(path):
 
 
 def _make_resume_pdf(path):
-    import fitz
-    doc = fitz.open()
+    from terbium._mupdf import pymupdf
+    doc = pymupdf.open()
     pg = doc.new_page(width=612, height=792)
     pg.insert_text((50, 50), "Jane Developer", fontsize=16)
     pg.insert_text((50, 75), "jane@example.com | (555) 123-4567", fontsize=10)
@@ -438,15 +438,15 @@ def _make_resume_pdf(path):
 
 
 def _make_dense_catalog_pdf(path, n=12):
-    import fitz
-    doc = fitz.open()
+    from terbium._mupdf import pymupdf
+    doc = pymupdf.open()
     pg = doc.new_page(width=820, height=1040)
     cols, rows = 4, 3
     for i in range(n):
         col, row = i % cols, i // cols
         x0 = 30 + col * 195
         y0 = 40 + row * 320
-        pg.insert_image(fitz.Rect(x0, y0, x0 + 160, y0 + 120), stream=_photo_bytes((80 + i * 10, 100, 120)))
+        pg.insert_image(pymupdf.Rect(x0, y0, x0 + 160, y0 + 120), stream=_photo_bytes((80 + i * 10, 100, 120)))
         pg.insert_text((x0, y0 + 130), f"Product {i + 1}", fontsize=9)
         pg.insert_text((x0, y0 + 148), f"SKU: P-{100 + i}", fontsize=8)
     doc.save(path)
@@ -454,10 +454,10 @@ def _make_dense_catalog_pdf(path, n=12):
 
 
 def _make_sparse_catalog_pdf(path):
-    import fitz
-    doc = fitz.open()
+    from terbium._mupdf import pymupdf
+    doc = pymupdf.open()
     pg = doc.new_page(width=600, height=800)
-    pg.insert_image(fitz.Rect(50, 50, 350, 300), stream=_photo_bytes((140, 90, 70)))
+    pg.insert_image(pymupdf.Rect(50, 50, 350, 300), stream=_photo_bytes((140, 90, 70)))
     pg.insert_text((50, 320), "Lone Product", fontsize=14)
     pg.insert_text((50, 350), "SKU: LP-001", fontsize=10)
     pg.insert_text((50, 370), "Material: Oak", fontsize=10)
@@ -619,8 +619,8 @@ def test_provider_pins_openai_kimi_grok():
 
 def _make_task_invoice_pdf(path):
     """Invoice with Description/Qty/Unit/Amount table (regression fixture)."""
-    import fitz
-    doc = fitz.open()
+    from terbium._mupdf import pymupdf
+    doc = pymupdf.open()
     pg = doc.new_page(width=612, height=792)
     pg.insert_text((50, 50), "INVOICE", fontsize=18)
     pg.insert_text((50, 90), "Invoice No: INV-2041", fontsize=11)
@@ -845,3 +845,98 @@ def test_openai_o_series_uses_max_completion_tokens():
     assert sent[0]["model"] == "o3-mini"
     assert "max_completion_tokens" in sent[0] and "max_tokens" not in sent[0]
     assert "max_tokens" in sent[1] and "max_completion_tokens" not in sent[1]
+
+
+def test_import_does_not_warn_about_fitz():
+    # PyMuPDF 2.0 warns on `import fitz`; terbium must import it as `pymupdf`.
+    # A fresh interpreter, because this process has already imported terbium.
+    import subprocess
+    import sys
+
+    code = ("import terbium, terbium.extract, terbium.layout.ocr, "
+            "terbium.documents.pdf, terbium.cli")
+    proc = subprocess.run([sys.executable, "-W", "always", "-c", code],
+                          capture_output=True, text=True)
+    assert proc.returncode == 0, proc.stderr
+    assert "fitz" not in proc.stderr, proc.stderr
+
+
+def test_mupdf_falls_back_to_fitz_without_pymupdf_name(monkeypatch):
+    # PyMuPDF 1.24.0 to 1.24.2 only have the `fitz` module name.
+    import importlib
+    import sys
+    import types
+
+    import terbium._mupdf as shim
+
+    old_fitz = types.ModuleType("fitz")
+    monkeypatch.setitem(sys.modules, "pymupdf", None)   # makes `import pymupdf` fail
+    monkeypatch.setitem(sys.modules, "fitz", old_fitz)
+    try:
+        importlib.reload(shim)
+        assert shim.pymupdf is old_fitz
+    finally:
+        monkeypatch.undo()
+        importlib.reload(shim)
+    assert shim.pymupdf is not old_fitz
+    assert callable(shim.pymupdf.open)
+
+
+def test_resume_heading_needs_a_short_line():
+    from terbium.schema.resume import _map_section
+
+    assert _map_section("EXPERIENCE") == "experience"
+    assert _map_section("Work Experience") == "experience"
+    assert _map_section("Technical Skills:") == "skills"
+    assert _map_section("Licenses & Certifications") == "certifications"
+    assert _map_section("Summary") == "summary"
+    # headings 0.10.0 recognised through a longer word stay headings
+    assert _map_section("Educational Background") == "education"
+    assert _map_section("Academics") == "education"
+    assert _map_section("Work Experiences") == "experience"
+    assert _map_section("Technical Skillset") == "skills"
+    # a sentence that mentions a section word is content, not a heading
+    assert _map_section("Led a team with deep Python experience") is None
+    assert _map_section("• Python experience") is None
+    assert _map_section("Inexperienced hires mentored") is None
+
+
+def test_resume_keeps_lines_that_mention_a_section_word(tmp_path):
+    import terbium
+    from terbium._mupdf import pymupdf
+
+    doc = pymupdf.open()
+    pg = doc.new_page(width=612, height=792)
+    pg.insert_text((50, 50), "Jane Developer", fontsize=16)
+    pg.insert_text((50, 75), "jane@example.com", fontsize=10)
+    pg.insert_text((50, 120), "Work Experience", fontsize=12)
+    pg.insert_text((50, 145), "Senior Engineer at TechCo (2020-2024)", fontsize=10)
+    pg.insert_text((50, 165), "Led a team with deep Python experience", fontsize=10)
+    pg.insert_text((50, 200), "EDUCATION", fontsize=12)
+    pg.insert_text((50, 225), "B.S. Computer Science, State University", fontsize=10)
+    path = str(tmp_path / "resume.pdf")
+    doc.save(path)
+    doc.close()
+
+    parsed = terbium.parse(path, doc_type="resume", announce=False)
+    content = {(r.fields.get("section"), r.fields.get("content")) for r in parsed.records}
+    assert ("experience", "Led a team with deep Python experience") in content
+    assert ("experience", "Senior Engineer at TechCo (2020-2024)") in content
+    assert ("education", "B.S. Computer Science, State University") in content
+
+
+def test_dominant_color_without_deprecated_pillow_api():
+    # Image.getdata() warns from Pillow 12.1 and is removed in Pillow 14; the helper
+    # swallows errors, so a removed API would quietly return None.
+    import io
+    import warnings
+
+    from PIL import Image
+
+    from terbium.extract import _dominant_color
+
+    buf = io.BytesIO()
+    Image.new("RGB", (40, 30), (200, 100, 50)).save(buf, format="PNG")
+    with warnings.catch_warnings():
+        warnings.simplefilter("error", DeprecationWarning)
+        assert _dominant_color(buf.getvalue()) == "#c86432"
