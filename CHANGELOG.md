@@ -2,9 +2,11 @@
 
 Full history, including releases before this file existed: https://velofy.co/terbium/changelog/
 
-## 0.10.1 (2026-10-26)
+## 2.0.0 (2026-10-26)
 
 The first PyPI release since 0.9.7. 0.10.0 was published on GitHub only, so `pip install terbium-parse` now brings everything listed under 0.10.0 as well as the fixes below.
+
+2.0.0 follows 0.10.0 directly. The jump in the version number is not an API break: code written for 0.10.0 runs unchanged.
 
 ### Fixed
 
@@ -28,7 +30,7 @@ The first PyPI release since 0.9.7. 0.10.0 was published on GitHub only, so `pip
 
 ## 0.10.0 (2026-09-30)
 
-First tagged GitHub release, published on GitHub only; PyPI went from 0.9.7 to 0.10.1.
+First tagged GitHub release, published on GitHub only; PyPI went from 0.9.7 to 2.0.0.
 
 ### Added
 
